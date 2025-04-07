@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="../CSS/login.css">
+</head>
+<body>
+    <div class="container">
+        <form action="" class="container-login">
+            <h2>🔐 Đăng nhập</h2>
+            <input id="user" type="text" placeholder="Tên đăng nhập"/>
+            <input id="password" type="password" placeholder="Mật khẩu"/>
+            <button class="btn-login">Đăng nhập</button>
+            <div class="footer-login">
+                <p class="text-login">Chưa có tài khoản?</p>
+                <a class="link-register" href="../pages/register.html">Đăng ký ngay</a>
+            </div>
+        </form> 
+    </div>
+
+    <div class="errorMessage">
+        <header class="headerErrorSignin">
+          <span class="textHeaderError">
+            <span class="textError">Error</span>
+          </span>
+          <img
+            class="btnCloseError"
+            src="../assets/images/pngtree-exit-close-button-for-game-user-interface-icon-png-image_3806346-removebg-preview.png"
+            alt=""
+          />
+        </header>
+        <div class="textBodyError">
+
+        </div>
+  </div>
+  <div class="successSignIn">
+        <div class="bodySuccess">
+          <span class="textSuccess">Đăng nhập thành công</span>
+          <img
+            class="btnCloseError"
+            src="../assets/images/pngtree-exit-close-button-for-game-user-interface-icon-png-image_3806346-removebg-preview.png"
+            alt=""
+          />
+        </div>
+  </div>
+ 
+<script src="../js/login.js"></script>
+</body>
+</html>

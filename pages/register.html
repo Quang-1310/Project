@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>register</title>
+    <link rel="stylesheet" href="../CSS/register.css">
+</head>
+<body>
+    <div class="container">
+        <form action="" class="container-login">
+            <h2>Đăng ký tài khoản</h2>
+            <input id="user" type="text" placeholder="Tên đăng nhập"/>
+            <input id="password" type="password" placeholder="Mật khẩu"/>
+            <input id="confirm" type="password" placeholder="Xác nhận mật khẩu"/>
+            <button class="btn-login">Đăng ký</button>
+            <div class="footer-login">
+                <p class="text-login">Đã có tài khoản?</p>
+                <a class="link-register" href="../pages/login.html">Đăng nhập</a>
+            </div>
+        </form> 
+    </div>
+
+    <div class="errorMessage">
+        <header class="headerErrorSignin">
+          <span class="textHeaderError">
+            <span class="textError">Error</span>
+          </span>
+          <img
+            class="btnCloseError"
+            src="../assets/images/pngtree-exit-close-button-for-game-user-interface-icon-png-image_3806346-removebg-preview.png"
+            alt=""
+          />
+        </header>
+        <div class="textBodyError">
+
+        </div>
+  </div>
+  <div class="successSignIn">
+        <div class="bodySuccess">
+          <span class="textSuccess">Đăng nhập thành công</span>
+          <img
+            class="btnCloseError"
+            src="../assets/images/pngtree-exit-close-button-for-game-user-interface-icon-png-image_3806346-removebg-preview.png"
+            alt=""
+          />
+        </div>
+  </div>
+
+<script src="../js/register.js"></script>
+</body>
+</html>
