@@ -699,20 +699,28 @@ select{
     margin-right: auto;
     margin-top: 24px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
-    display: flex;
-    flex-wrap: wrap;
+    /* display: flex;
+    flex-wrap: wrap; */
 }
 
 .excess-food-expenses p{
-    display: flex;
-    padding-top: 24px;
+    text-align: start;
     padding-left: 24px;
-    padding-bottom: 24px;
+    padding-bottom: 10px;
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
     color: rgba(220, 38, 38, 1);
     box-shadow: rgba(0, 0, 0, 0.15);
+    display: block;
+}
+
+.excess-food-expenses p:first-child{
+    padding-top: 24px;
+}
+
+.excess-food-expenses p:last-child{
+    padding-bottom: 24px;
 }
 
 .statistical {

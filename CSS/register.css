@@ -106,78 +106,64 @@ a{
 }
 
 .errorMessage {
-    display: flex;
-    padding: 16px;
-    flex-direction: column;
-    width: 80%;
-    max-width: 299px;
-    gap: 8px;
-    border-radius: 10px;
-    background: #ffe5e8;
-    position: fixed;
-    top: 22px;
-    left: 26px;
-  }
-  .headerErrorSignin {
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .textHeaderError {
-    height: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .textDetailed{
-    padding-left: 24px;
-  }
-  .textError {
-    color: rgb(188, 15, 15);
-    font-size: 16px;
-    font-weight: 500;
-  }
-  .btnCloseError {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    transition: transform 0.2s linear;
-  }
+  display: flex;
+  padding: 16px;
+  flex-direction: column;
+  width: 80%;
+  max-width: 299px;
+  gap: 8px;
+  border-radius: 10px;
+  background: #ffe5e8;
+  position: fixed;
+  top: 22px;
+  left: 26px;
+}
+.headerErrorSignin {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.textHeaderError {
+  height: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.textDetailed{
+  padding-left: 24px;
+}
+.textError {
+  color: rgb(188, 15, 15);
+  font-size: 16px;
+  font-weight: 500;
+}
 
-  .btnCloseError:active {  
-    transform: scale(0.9);  
-    opacity: 0.7; 
-} 
+.textBodyError {
+  color: #000;
+  font-size: 14px;
+  line-height: 21px;
+  display: flex;
+  flex-direction: column;
+}
+.successSignIn {
+  width: 50%;
+  max-width: 299px;
+  height: auto;
+  padding: 16px 16px 18px 16px;
+  border-radius: 10px;
+  background: #e5fff0;
+  position: fixed;
+  top: 22px; 
+  left: 26px;
+}
+.bodySuccess {
+  text-align: center;
+}
 
-  .textBodyError {
-    color: #000;
-    font-size: 14px;
-    line-height: 21px;
-    display: flex;
-    flex-direction: column;
-  }
-  .successSignIn {
-    width: 80%;
-    max-width: 299px;
-    height: 58px;
-    padding: 16px 16px 18px 16px;
-    border-radius: 10px;
-    background: #e5fff0;
-    position: fixed;
-    top: 22px; 
-    left: 26px;
-  }
-  .bodySuccess {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-
-  .textSuccess {
-    color: #000;
-    font-size: 14px;
-    line-height: 14px;
-  }
+.textSuccess {
+  color: #000;
+  font-size: 14px;
+  line-height: 14px;
+}
 

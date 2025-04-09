@@ -24,8 +24,11 @@ else{
             errorMessage.style.display = "block";
             let span = document.createElement("span");
             span.className="textDetailed";
-            span.textContent="user không được để trống";
+            span.textContent="Tên đăng nhập không được để trống";
             textBodyError.appendChild(span);
+            setTimeout(() => {
+                errorMessage.style.display = "none";
+            }, 2000);
             return;
         }
         let valuePassword = password.value.trim();
@@ -35,6 +38,9 @@ else{
             span.className="textDetailed";
             span.textContent="Mật khẩu không được để trống";
             textBodyError.appendChild(span);
+            setTimeout(() => {
+                errorMessage.style.display = "none";
+            }, 2000);
             return;
         }
         
@@ -46,6 +52,9 @@ else{
             span.className = "textDetailed";
             span.textContent = "Chưa có tài khoản nào, vui lòng đăng ký";
             textBodyError.appendChild(span);
+            setTimeout(() => {
+                errorMessage.style.display = "none";
+            }, 2000);
             return;
         }
 
@@ -64,6 +73,9 @@ else{
             span.className="textDetailed";
             span.textContent="Tài khoản hoặc mật khẩu không đúng";
             textBodyError.appendChild(span);
+            setTimeout(() => {
+                errorMessage.style.display = "none";
+            }, 2000);
             return;
         }
     

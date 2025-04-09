@@ -24,24 +24,33 @@ btnRegister.addEventListener("click", function(event){
         errorMessage.style.display = "block";
         let span = document.createElement("span");
         span.className="textDetailed";
-        span.textContent="Tên đăng nhập không được để trống";
+        span.textContent="Tên đăng ký không được để trống";
         textBodyError.appendChild(span);
+        setTimeout(() => {
+            errorMessage.style.display = "none";
+        }, 2000);
         return;
     }
     else if(valueUser.includes(" ")){
         errorMessage.style.display = "block";
         let span = document.createElement("span");
         span.className="textDetailed";
-        span.textContent="Tên đăng nhập không được chứa khoảng trắng";
+        span.textContent="Tên đăng ký không được chứa khoảng trắng";
         textBodyError.appendChild(span);
+        setTimeout(() => {
+            errorMessage.style.display = "none";
+        }, 2000);
         return;
     }
     else if(vietnameseRegex.test(valueUser)){
         errorMessage.style.display = "block";
         let span = document.createElement("span");
         span.className="textDetailed";
-        span.textContent="Tên đăng nhập không được chứa dấu tiếng Việt";
+        span.textContent="Tên đăng ký không được chứa dấu tiếng Việt";
         textBodyError.appendChild(span);
+        setTimeout(() => {
+            errorMessage.style.display = "none";
+        }, 2000);
         return;
     }
     let valuePassword = password.value;
@@ -52,6 +61,9 @@ btnRegister.addEventListener("click", function(event){
         span.className="textDetailed";
         span.textContent="Mật khẩu không được để trống";
         textBodyError.appendChild(span);
+        setTimeout(() => {
+            errorMessage.style.display = "none";
+        }, 2000);
         return;
     }
     else if(valuePassword.length < 6){
@@ -60,6 +72,9 @@ btnRegister.addEventListener("click", function(event){
         span.className="textDetailed";
         span.textContent="Mật khẩu tối thiểu phải từ 6 ký tự trở lên";
         textBodyError.appendChild(span);
+        setTimeout(() => {
+            errorMessage.style.display = "none";
+        }, 2000);
         return;
     }
     let valueConfirm = confirmPassword.value;
@@ -67,8 +82,11 @@ btnRegister.addEventListener("click", function(event){
         errorMessage.style.display = "block";
         let span = document.createElement("span");
         span.className="textDetailed";
-        span.textContent="Bạn cần phải nhập mật khẩu xác nhận";
+        span.textContent="Bạn cần phải ký mật khẩu xác nhận";
         textBodyError.appendChild(span);
+        setTimeout(() => {
+            errorMessage.style.display = "none";
+        }, 2000);
         return;
     }
     if(valueConfirm === valuePassword){
@@ -79,6 +97,9 @@ btnRegister.addEventListener("click", function(event){
                 span.className="textDetailed";
                 span.textContent="Tài khoản đã tồn tại";
                 textBodyError.appendChild(span);
+                setTimeout(() => {
+                    errorMessage.style.display = "none";
+                }, 2000);
                 return;
             }
         }
