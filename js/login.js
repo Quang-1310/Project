@@ -12,7 +12,7 @@ let successSignIn = document.querySelector(".successSignIn");
 errorMessage.style.display = "none";
 successSignIn.style.display = "none";
 
-if(Array.isArray(account) && account.length > 0){
+if(account){
     window.location.href = "../pages/finance.html";
 }
 else{
