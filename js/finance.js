@@ -342,15 +342,6 @@ addMoney.addEventListener("click", function() {
     }
 
     const amountSpend = Number(valueMoneySpend);
-    // if (amountSpend > currentMonthData.amount) {
-    //     Swal.fire({
-    //         icon: "error",
-    //         title: "Oops...",
-    //         text: "Số tiền chi tiêu vượt quá số tiền còn lại!",
-    //     });
-
-    //     // return;
-    // }
 
     let objTransactions = {
         id: transactions.length + 1,
@@ -375,8 +366,9 @@ addMoney.addEventListener("click", function() {
     note.value = "";
     checkCategoryBudget();
     renderCheckCategoryBudget();
+    renderTableStatistical();
 });
-  
+
 
 function renderCategory() {
     let htmlCategory = "";
@@ -627,7 +619,7 @@ renderPage();
 renderTransactions();
 
 function checkCategoryBudget() {
-    const excessFoodExpenses = document.querySelector(".excess-food-expenses"); 
+    // const excessFoodExpenses = document.querySelector(".excess-food-expenses"); 
     const currentMonthData = monthlyCategories.find(item => item.month === currentMonth);
     const newArrCategoryBudget = [];
 
@@ -652,10 +644,13 @@ function checkCategoryBudget() {
 
     if (newArrCategoryBudget.length > 0) {
         arrCategoryBudget = newArrCategoryBudget;
-        localStorage.setItem(`moneyOverLimit_${userId}`, JSON.stringify(arrCategoryBudget));
+    
     } else {
-        arrCategoryBudget = JSON.parse(localStorage.getItem(`moneyOverLimit_${userId}`)) || [];
+       
+        arrCategoryBudget =  [];
     }
+    localStorage.setItem(`moneyOverLimit_${userId}`, JSON.stringify(arrCategoryBudget));
+
     renderCheckCategoryBudget();
 }
 
@@ -727,51 +722,57 @@ function renderMoney() {
     }
 }
 
-// function renderTableStatistical(){
-//     let totalMoneyCategorySpent = 0;
-//     let objMonthltRepor = {
-//         userId: currentUser.id,
-//         month: 1,
-//         totalAmount: 0,
-//         details: []
-//     };
-//     console.log(objMonthltRepor.month);
-//     transactions.forEach((value) => {
-//         totalMoneyCategorySpent += Number(value.amount);
-//         objMonthltRepor.details.push(        
-//             {                
-//                 categoryId: value.categoryId,
-//                 amount: value.amount
-//             });
-//     });
-//     objMonthltRepor.totalAmount = totalMoneyCategorySpent;
-//     monthlReports = monthlReports.filter(
-//         report => !(report.userId === currentUser.id && report.month === currentMonth)
-//     );
-//     monthlReports.push(objMonthltRepor);
-//     localStorage.setItem(`monthlReports_${userId}`,JSON.stringify(monthlReports));
-//     if (totalMoneyCategorySpent < Number(monthlyBudget)) {
-//         console.log("Đạt");                                                 
-//     } else {
-//         console.log("Vượt quá ngân sách!");
-//     }
+
+function renderTableStatistical(){
+    let totalMoneyCategorySpent = 0;
+    let objMonthltRepor = {
+        userId: currentUser.id,
+        month: currentMonth,
+        totalAmount: 0,
+        details: []
+    };
+    const currentTransactions = transactions.filter(value => value.month === currentMonth);
+
+    if (currentTransactions.length === 0) {
+        tbody.innerHTML = "";
+        return;
+    }
+
+    transactions.forEach((value) => {
+        if(value.month === currentMonth) {
+            totalMoneyCategorySpent += Number(value.amount);
+            objMonthltRepor.details.push({
+                categoryId: value.categoryId,
+                amount: value.amount
+            });
+        }
+    });
+
+    objMonthltRepor.totalAmount = totalMoneyCategorySpent;
+    monthlReports = monthlReports.filter(
+        report => !(report.userId === currentUser.id && report.month === currentMonth)
+    );
+    monthlReports.push(objMonthltRepor);
+    localStorage.setItem(`monthlReports_${userId}`,JSON.stringify(monthlReports));
     
+    let budgetMonth = JSON.parse(localStorage.getItem(`monthlyBudget_${userId}`)) || "0"
+    let htmlReport = monthlReports.map((value) => {
+        let status = Number(value.totalAmount) <= Number(budgetMonth)
+            ? `<span style="color:green">✅ Đạt</span>`
+            : `<span style="color:red">Vượt</span>`;
+        return `
+            <tr>
+                <td>${value.month}</td>
+                <td>${Number(value.totalAmount).toLocaleString("vi-VN")} VND</td>
+                <td>${Number(budgetMonth).toLocaleString("vi-VN")}</td>
+                <td>${status}</td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = htmlReport.join("");
 
-    // let htmlReport = monthlReports.map((value) => {
-    //     return`
-    //         <tr>
-    //             <td>${value.month}</td>
-    //             <td>${value.totalAmount} VND</td>
-    //             <td>${monthlyBudget}</td>
-    //             <td>✅ Đạt</td>
-    //         </tr>
-    //     `;
-    // });
+}
 
-    // let convert = htmlReport.join("");
-    // tbody.innerHTML = convert;
+renderTableStatistical();
 
-// }
-
-// renderTableStatistical();
 
