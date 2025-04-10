@@ -86,7 +86,7 @@ monthElement.addEventListener("change", function() {
 
 moneyEmpty.style.display = "none";
 let valueMoney;
-let monthlyBudget = JSON.parse(localStorage.getItem(`monthlyBudget_${userId}`)) || "0"
+// let monthlyBudget = JSON.parse(localStorage.getItem(`monthlyBudget_${userId}`)) || "0"
 btnSave.addEventListener("click", function() {
     if (!currentMonth) { 
         Swal.fire({
@@ -121,16 +121,18 @@ btnSave.addEventListener("click", function() {
                 id : monthlyCategories.length + 1,
                 month: currentMonth,
                 amount: Number(valueMoney),
+                monthlyBudget : Number(valueMoney),
                 categories: []
             };
             monthlyCategories.push(currentMonthData);
         } else {
             currentMonthData.amount = Number(valueMoney);
+            currentMonthData.budgetMonth = Number(valueMoney);
         }
 
         localStorage.setItem(`monthlyCategories_${userId}`, JSON.stringify(monthlyCategories));
         localStorage.setItem(`Money_${userId}`, valueMoney); 
-        localStorage.setItem(`monthlyBudget_${userId}`, valueMoney); 
+        // localStorage.setItem(`monthlyBudget_${userId}`, valueMoney); 
 
         money.textContent = Number(valueMoney).toLocaleString("vi-VN") + " VND";
     }
@@ -755,16 +757,18 @@ function renderTableStatistical(){
     monthlReports.push(objMonthltRepor);
     localStorage.setItem(`monthlReports_${userId}`,JSON.stringify(monthlReports));
     
-    let budgetMonth = JSON.parse(localStorage.getItem(`monthlyBudget_${userId}`)) || "0"
+    monthlyCategories = JSON.parse(localStorage.getItem(`monthlyCategories_${userId}`)) || [];
     let htmlReport = monthlReports.map((value) => {
-        let status = Number(value.totalAmount) <= Number(budgetMonth)
+        const findMonth = monthlyCategories.find(budget => budget.month === value.month);
+        const budgetForMonth = findMonth ? findMonth.monthlyBudget : 0;
+        let status = Number(value.totalAmount) <= Number(budgetForMonth)
             ? `<span style="color:green">✅ Đạt</span>`
             : `<span style="color:red">Vượt</span>`;
         return `
             <tr>
                 <td>${value.month}</td>
                 <td>${Number(value.totalAmount).toLocaleString("vi-VN")} VND</td>
-                <td>${Number(budgetMonth).toLocaleString("vi-VN")}</td>
+                <td>${Number(budgetForMonth).toLocaleString("vi-VN")}</td>
                 <td>${status}</td>
             </tr>
         `;
@@ -774,5 +778,4 @@ function renderTableStatistical(){
 }
 
 renderTableStatistical();
-
 

@@ -1,7 +1,7 @@
 let userNameInput = document.querySelector("#user");
 let password = document.querySelector("#password");
 let btnLogin = document.querySelector(".btn-login");
-let account = JSON.parse(localStorage.getItem("acount")) || [];
+let account = JSON.parse(localStorage.getItem("acount"));
 
 let errorMessage = document.querySelector(".errorMessage");
 let btnCloseError = document.querySelector(".btnCloseError");
@@ -12,7 +12,7 @@ let successSignIn = document.querySelector(".successSignIn");
 errorMessage.style.display = "none";
 successSignIn.style.display = "none";
 
-if(account){
+if (account && account.username) {
     window.location.href = "../pages/finance.html";
 }
 else{
@@ -88,4 +88,3 @@ else{
 btnCloseError.addEventListener("click", function () {
     errorMessage.style.display = "none";
 });
-
