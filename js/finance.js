@@ -44,11 +44,11 @@ let selectPrice = document.querySelector("#select-price");
 let filteredTransactions = JSON.parse(localStorage.getItem(`filteredTransactions_${userId}`)) || [];
 
 let currentPage = 1;
-const totalPerPage = 3;
-const totalPage = Math.ceil(transactions.length/totalPerPage);
-const btnPageElement = document.querySelector("#btn-page");
-const btnPrev = document.querySelector("#btn-previous");
-const btnNext = document.querySelector("#btn-next");
+let totalPerPage = 3;
+let totalPage = Math.ceil(transactions.length/totalPerPage);
+let btnPageElement = document.querySelector("#btn-page");
+let btnPrev = document.querySelector("#btn-previous");
+let btnNext = document.querySelector("#btn-next");
 
 let excessFoodExpenses = document.querySelector(".excess-food-expenses");
 let arrCategoryBudget = JSON.parse(localStorage.getItem(`moneyOverLimit_${userId}`)) || [];
@@ -57,12 +57,15 @@ let monthlReports = JSON.parse(localStorage.getItem(`monthlReports_${userId}`)) 
 let table = document.querySelector("#table");
 let tbody = document.querySelector("#tbody");
 
+
+// Đăng xuất
 selectElement.addEventListener("change", function(event) {
     if (event.target.value === "Đăng xuất") {
         setTimeout(() => {
-            if (!confirm("Bạn có chắc chắn muốn đăng xuất khỏi trang hay không?")) {
+            if(!confirm("Bạn có chắc chắn muốn đăng xuất khỏi trang hay không?")){
                 event.target.value = "Tài khoản";
-            } else {
+            } 
+            else{
                 localStorage.removeItem("acount");
                 window.location.href = "../pages/login.html";
             }
@@ -70,6 +73,7 @@ selectElement.addEventListener("change", function(event) {
     }
 });
 
+// Chọn tháng chi tiêu
 let currentMonth;
 monthElement.addEventListener("change", function() {
     currentMonth = monthElement.value;
@@ -83,10 +87,9 @@ monthElement.addEventListener("change", function() {
 });
 
 
-
+//Nhập ngân sách tháng
 moneyEmpty.style.display = "none";
 let valueMoney;
-// let monthlyBudget = JSON.parse(localStorage.getItem(`monthlyBudget_${userId}`)) || "0"
 btnSave.addEventListener("click", function() {
     if (!currentMonth) { 
         Swal.fire({
@@ -97,7 +100,6 @@ btnSave.addEventListener("click", function() {
     }
 
     let valueMoney = inputMoney.value.trim();
-
     if (!valueMoney) {
         textMoneyEmpty.textContent = "Dữ liệu không được để trống";
         moneyEmpty.style.display = "block";
@@ -125,21 +127,23 @@ btnSave.addEventListener("click", function() {
                 categories: []
             };
             monthlyCategories.push(currentMonthData);
-        } else {
-            currentMonthData.amount = Number(valueMoney);
-            currentMonthData.budgetMonth = Number(valueMoney);
+        }
+        else{
+            currentMonthData.amount += Number(valueMoney);
+            currentMonthData.monthlyBudget += Number(valueMoney);
         }
 
         localStorage.setItem(`monthlyCategories_${userId}`, JSON.stringify(monthlyCategories));
         localStorage.setItem(`Money_${userId}`, valueMoney); 
-        // localStorage.setItem(`monthlyBudget_${userId}`, valueMoney); 
 
         money.textContent = Number(valueMoney).toLocaleString("vi-VN") + " VND";
+        renderMoney();
+        renderTableStatistical();
     }
 });
 
 
-
+//Sự kiện thêm danh mục
 btnAddCategory.addEventListener("click", function() {
     if (!currentMonth) {
         Swal.fire({
@@ -166,7 +170,7 @@ btnAddCategory.addEventListener("click", function() {
     } else if (isNaN(valueLimitMoney) || valueLimitMoney < 0) {
         Swal.fire({
             icon: "error",
-            title: "Oops...",
+            title: "Cảnh báo",
             text: "Dữ liệu nhập không hợp lệ",
         });
         return;
@@ -188,7 +192,7 @@ btnAddCategory.addEventListener("click", function() {
         if (exisCategory) {
             Swal.fire({
                 icon: "warning",
-                title: "Oops...",
+                title: "Cảnh báo",
                 text: "Danh mục đã tồn tại",
             });
             return;
@@ -226,8 +230,9 @@ btnAddCategory.addEventListener("click", function() {
     limit.value = "";
 });
 
+// Hàm render dữ liệu danh mục
 function renderData() {
-    const currentMonthData = monthlyCategories.find(month => month.month === currentMonth);
+    let currentMonthData = monthlyCategories.find(month => month.month === currentMonth);
     
     if (!currentMonthData) {
         expenditure.innerHTML = "<p>Không có dữ liệu cho tháng này.</p>";
@@ -254,9 +259,9 @@ renderData();
 renderCategory();
 renderTransactions();
 checkCategoryBudget();
-// renderTableStatistical();
 
 
+// Hàm chỉnh sửa danh mục
 function handleEdit(indexMonth, indexCategories){
     editMonthIndex = indexMonth;
     editCategoryIndex = indexCategories;
@@ -266,6 +271,7 @@ function handleEdit(indexMonth, indexCategories){
     typeAddOrSave = "save";
 }
 
+//Hàm xoá danh mục
 function handleDelete(indexMonth, indexCategories){
     Swal.fire({
         title: "Are you sure?",
@@ -289,11 +295,13 @@ function handleDelete(indexMonth, indexCategories){
       });
 }
 
+//Chọn danh mục cần chi tiêu
 let valueSelectMoney;
 selectMoney.addEventListener("change", function(event){
     valueSelectMoney = event.target.value;
 })
 
+//Nhập số tiền cần chi tiêu cho danh mục
 addMoney.addEventListener("click", function() {
     if (!currentMonth) {
         Swal.fire({
@@ -309,7 +317,7 @@ addMoney.addEventListener("click", function() {
     if (!valueMoneySpend || isNaN(valueMoneySpend) || Number(valueMoneySpend) <= 0) {
         Swal.fire({
             icon: "error",
-            title: "Oops...",
+            title: "Cảnh báo",
             text: "Số tiền nhập vào không hợp lệ",
         });
         return;
@@ -317,7 +325,7 @@ addMoney.addEventListener("click", function() {
     if (!selectedCategory) {
         Swal.fire({
             icon: "warning",
-            title: "Oops...",
+            title: "Cảnh báo",
             text: "Bạn chưa chọn danh mục",
         });
         return;
@@ -325,7 +333,7 @@ addMoney.addEventListener("click", function() {
     if (!valueNote) {
         Swal.fire({
             icon: "warning",
-            title: "Oops...",
+            title: "Cảnh báo",
             text: "Bạn chưa viết ghi chú",
         });
         return;
@@ -337,13 +345,13 @@ addMoney.addEventListener("click", function() {
     if (!currentMonthData || currentMonthData.amount === undefined) {
         Swal.fire({
             icon: "error",
-            title: "Oops...",
+            title: "Cảnh báo",
             text: "Chưa thiết lập số tiền cho tháng này!",
         });
         return;
     }
 
-    const amountSpend = Number(valueMoneySpend);
+    let amountSpend = Number(valueMoneySpend);
 
     let objTransactions = {
         id: transactions.length + 1,
@@ -371,13 +379,14 @@ addMoney.addEventListener("click", function() {
     renderTableStatistical();
 });
 
-
+// Hàm rander những danh mục cần chọn
 function renderCategory() {
     let htmlCategory = "";
-    if (!currentMonth) {
+    if(!currentMonth){
         htmlCategory = "<option value=''>Tiền chi tiêu</option>";
-    } else {
-        const currentMonthData = monthlyCategories.find(month => month.month === currentMonth);
+    } 
+    else{
+        let currentMonthData = monthlyCategories.find(month => month.month === currentMonth);
         if (currentMonthData && currentMonthData.categories.length > 0) {
             htmlCategory = currentMonthData.categories.map(category => 
                 `<option value="${category.name}">${category.name}</option>`
@@ -389,24 +398,25 @@ function renderCategory() {
     selectMoney.innerHTML = htmlCategory;
 }
 
+//Hàm render danh mục lịch sử chi tiêu
 function renderTransactions() {
-    const currentTransactions = transactions.filter(transaction => transaction.month === currentMonth);
+    let currentTransactions = transactions.filter(transaction => transaction.month === currentMonth);
     
     if (currentTransactions.length === 0) {
         containerTransactionContent.innerHTML = "<br> <p>Không có giao dịch nào!</p>";
         return;
     }
 
-    const getStart = (currentPage - 1) * totalPerPage;
-    const getEnd = totalPerPage * currentPage;
-    const transactionSlice = currentTransactions.slice(getStart, getEnd);
+    let getStart = (currentPage - 1) * totalPerPage;
+    let getEnd = totalPerPage * currentPage;
+    let transactionSlice = currentTransactions.slice(getStart, getEnd);
 
     let htmlTransaction = transactionSlice.map((value, index) => {
         return `
             <div class="transaction-content">
                 <p>${value.categoryTransaction} - ${value.note}: ${Number(value.amount).toLocaleString("vi-VN") + " VND"}</p>
                 <div>
-                    <button onclick="handleDeleteTransaction(${transactions.indexOf(value)})" id="btn-delete-transaction">Xoá</button>
+                    <button onclick="handleDeleteTransaction(${index})" id="btn-delete-transaction">Xoá</button>
                 </div>
             </div>
         `;
@@ -415,6 +425,7 @@ function renderTransactions() {
     containerTransactionContent.innerHTML = htmlTransaction.join("");
 }
 
+//Hàm xoá danh mục ở phần lịch sử
 function handleDeleteTransaction(index) {
     Swal.fire({
         title: "Are you sure?",
@@ -438,17 +449,27 @@ function handleDeleteTransaction(index) {
       });
 }
 
+//Sự kiện tìm kiếm
 btnSearch.addEventListener("click", function(){
-    let valueInputContent = inputContent.value.trim();
-    filterTransactions(valueInputContent);
+    let valueInputContent = inputContent.value.trim().charAt(0).toUpperCase() + inputContent.value.trim().slice(1).toLowerCase();
+    if(!valueInputContent){
+        return;
+    }
+    else{
+        filterTransactions(valueInputContent);
+    }
 });
 
+
+//Hàm lọc danh mục của lịch sử
 function filterTransactions(valueInputContent) {
     filteredTransactions = transactions.filter((value) => 
         value.categoryTransaction.includes(valueInputContent)
     );
     localStorage.setItem(`filterTransactions_${userId}`, JSON.stringify(filteredTransactions));
 
+    let currentTransactions = filteredTransactions.filter(transaction => transaction.month === currentMonth);
+    totalPage = Math.ceil(currentTransactions.length / totalPerPage);
     let htmlTransaction = filteredTransactions.map((value, index) => {
         return `
             <div class="transaction-content">
@@ -465,6 +486,7 @@ function filterTransactions(valueInputContent) {
     renderPage();
 }
 
+//Hàm xoá danh mục lịch sử
 function handleDeleteTransactionHistory(index) {
     Swal.fire({
         title: "Are you sure?",
@@ -502,7 +524,7 @@ function handleDeleteTransactionHistory(index) {
 
 }
 
-
+//Hàm chọn sắp xếp danh mục theo giá tiền
 selectPrice.addEventListener("change", function(event){
     let valueSelectPrice = event.target.value;
     let valueInputContent = inputContent.value.trim();
@@ -557,6 +579,7 @@ selectPrice.addEventListener("change", function(event){
     }
 });
 
+//Hàm sắp xếp
 function renderCategoryIncresePrice(arr){
     arr.sort((a, b) => a.amount - b.amount);
 }
@@ -565,28 +588,32 @@ function renderCategoryDecresePrice(arr){
     arr.sort((a, b) => b.amount - a.amount);
 }
 
-const renderPage = () => {
-    const currentTransactions = transactions.filter(transaction => transaction.month === currentMonth);
-    const totalPage = Math.ceil(currentTransactions.length / totalPerPage);
+
+//Hàm render các nút phân trang
+let renderPage = () => {
+    let currentTransactions = transactions.filter(transaction => transaction.month === currentMonth);
+    totalPage = Math.ceil(currentTransactions.length / totalPerPage);
     btnPageElement.textContent = "";
 
-    for (let i = 1; i <= totalPage; i++) {
-        const btnElement = document.createElement("button");
+    for(let i = 1; i <= totalPage; i++){
+        let btnElement = document.createElement("button");
         btnElement.textContent = i;
 
-        if (currentPage === i) {
+        if(currentPage === i){
             btnElement.classList.add("btn-active");
         }
 
-        if (currentPage === 1) {
+        if(currentPage === 1){
             document.querySelector("#btn-previous").setAttribute("disabled", "disabled");
-        } else {
+        } 
+        else{
             document.querySelector("#btn-previous").removeAttribute("disabled");
         }
 
-        if (currentPage === totalPage) {
+        if(currentPage === totalPage){
             document.querySelector("#btn-next").setAttribute("disabled", "disabled");
-        } else {
+        } 
+        else{
             document.querySelector("#btn-next").removeAttribute("disabled");
         }
 
@@ -599,12 +626,15 @@ const renderPage = () => {
     }
 };
 
+
+
 btnNext.addEventListener("click", function() {
     if(currentPage < totalPage){
         currentPage++;
         renderPage();
         renderTransactions();
     }
+
 
 });
 
@@ -620,15 +650,17 @@ btnPrev.addEventListener("click", function() {
 renderPage();
 renderTransactions();
 
+
+//Hàm kiểm tra các chi tiêu vượt quá giới hạn
 function checkCategoryBudget() {
-    // const excessFoodExpenses = document.querySelector(".excess-food-expenses"); 
-    const currentMonthData = monthlyCategories.find(item => item.month === currentMonth);
-    const newArrCategoryBudget = [];
+    // let excessFoodExpenses = document.querySelector(".excess-food-expenses"); 
+    let currentMonthData = monthlyCategories.find(item => item.month === currentMonth);
+    let newArrCategoryBudget = [];
 
     if (currentMonthData) {
         currentMonthData.categories.forEach(category => {
-            const categoryName = category.name;
-            const categoryBudget = Number(category.budget);
+            let categoryName = category.name;
+            let categoryBudget = Number(category.budget);
             let totalSpentForCategory = 0;
 
             transactions.forEach(transaction => {
@@ -638,7 +670,7 @@ function checkCategoryBudget() {
             });
 
             if (totalSpentForCategory > categoryBudget) {
-                const message = `Danh mục '${categoryName}' đã vượt giới hạn: ${totalSpentForCategory.toLocaleString("vi-VN")} / ${categoryBudget.toLocaleString("vi-VN")} VND`;
+                let message = `Danh mục '${categoryName}' đã vượt giới hạn: ${totalSpentForCategory.toLocaleString("vi-VN")} / ${categoryBudget.toLocaleString("vi-VN")} VND`;
                 newArrCategoryBudget.push(message);
             }
         });
@@ -656,17 +688,19 @@ function checkCategoryBudget() {
     renderCheckCategoryBudget();
 }
 
+
+//Hàm render các danh mục vượt quá giới hạn
 function renderCheckCategoryBudget() {
     excessFoodExpenses.innerHTML = ""; 
 
     if (arrCategoryBudget.length > 0) {
         arrCategoryBudget.forEach(message => {
-            const p = document.createElement("p");
+            let p = document.createElement("p");
             p.textContent = message;
             excessFoodExpenses.appendChild(p);
         });
     } else {
-        const p = document.createElement("p");
+        let p = document.createElement("p");
         p.textContent = "Không có danh mục nào chi tiêu vượt quá giới hạn trong tháng này.";
         excessFoodExpenses.appendChild(p);
     }
@@ -674,7 +708,7 @@ function renderCheckCategoryBudget() {
 arrCategoryBudget = JSON.parse(localStorage.getItem(`moneyOverLimit_${userId}`)) || [];
 renderCheckCategoryBudget();
 
-if (monthlyCategories.length > 0) {
+if(monthlyCategories.length > 0){
     currentMonth = monthlyCategories[0].month;
     monthElement.value = currentMonth;
     renderMoney();
@@ -684,7 +718,8 @@ if (monthlyCategories.length > 0) {
     checkCategoryBudget();
     renderCheckCategoryBudget();
     renderCategory();
-} else {
+} 
+else{
     currentMonth = null;
     renderMoney();
 }
@@ -699,8 +734,8 @@ function renderMoney() {
         money.textContent = "0 VND";
         return;
     }
-    const monthlyCategories = JSON.parse(localStorage.getItem(`monthlyCategories_${userId}`)) || [];
-    const monthData = monthlyCategories.find(m => m.month === currentMonth);
+    let monthlyCategories = JSON.parse(localStorage.getItem(`monthlyCategories_${userId}`)) || [];
+    let monthData = monthlyCategories.find(m => m.month === currentMonth);
 
     
     if (!monthData) {
@@ -724,7 +759,7 @@ function renderMoney() {
     }
 }
 
-
+// Hàm render thống kê chi tiêu các tháng
 function renderTableStatistical(){
     let totalMoneyCategorySpent = 0;
     let objMonthltRepor = {
@@ -733,7 +768,7 @@ function renderTableStatistical(){
         totalAmount: 0,
         details: []
     };
-    const currentTransactions = transactions.filter(value => value.month === currentMonth);
+    let currentTransactions = transactions.filter(value => value.month === currentMonth);
 
     if (currentTransactions.length === 0) {
         tbody.innerHTML = "";
@@ -759,8 +794,8 @@ function renderTableStatistical(){
     
     monthlyCategories = JSON.parse(localStorage.getItem(`monthlyCategories_${userId}`)) || [];
     let htmlReport = monthlReports.map((value) => {
-        const findMonth = monthlyCategories.find(budget => budget.month === value.month);
-        const budgetForMonth = findMonth ? findMonth.monthlyBudget : 0;
+        let findMonth = monthlyCategories.find(budget => budget.month === value.month);
+        let budgetForMonth = findMonth ? findMonth.monthlyBudget : 0;
         let status = Number(value.totalAmount) <= Number(budgetForMonth)
             ? `<span style="color:green">✅ Đạt</span>`
             : `<span style="color:red">Vượt</span>`;
