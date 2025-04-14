@@ -183,7 +183,7 @@ btnAddCategory.addEventListener("click", function() {
     monthlyCategories = JSON.parse(localStorage.getItem(`monthlyCategories_${userId}`)) || [];
     let currentMonthData = monthlyCategories.find(month => month.month === currentMonth);
 
-    if (!currentMonthData) {
+    if(!currentMonthData) {
         Swal.fire({
             title: "Bạn chưa thiết lập số tiền cho tháng này",
             icon: "warning"
@@ -191,7 +191,7 @@ btnAddCategory.addEventListener("click", function() {
         return;
     }
 
-    if (typeAddOrSave === "add") {
+    if(typeAddOrSave === "add") {
         let exisCategory = currentMonthData.categories.find(cat => cat.name === valueNameCategory);
         if(exisCategory) {
             Swal.fire({
@@ -308,7 +308,7 @@ selectMoney.addEventListener("change", function(event){
 
 //Nhập số tiền cần chi tiêu cho danh mục
 addMoney.addEventListener("click", function() {
-    if (!currentMonth) {
+    if(!currentMonth) {
         Swal.fire({
             title: "Bạn chưa nhập tháng",
             icon: "question"
@@ -319,7 +319,7 @@ addMoney.addEventListener("click", function() {
     let valueNote = note.value.trim();
     let selectedCategory = selectMoney.value;
 
-    if (!valueMoneySpend || isNaN(valueMoneySpend) || Number(valueMoneySpend) <= 0) {
+    if(!valueMoneySpend || isNaN(valueMoneySpend) || Number(valueMoneySpend) <= 0) {
         Swal.fire({
             icon: "error",
             title: "Cảnh báo",
@@ -327,7 +327,7 @@ addMoney.addEventListener("click", function() {
         });
         return;
     }
-    if (!selectedCategory) {
+    if(!selectedCategory) {
         Swal.fire({
             icon: "warning",
             title: "Cảnh báo",
@@ -392,11 +392,12 @@ function renderCategory() {
     } 
     else{
         let currentMonthData = monthlyCategories.find(month => month.month === currentMonth);
-        if (currentMonthData && currentMonthData.categories.length > 0) {
+        if(currentMonthData && currentMonthData.categories.length > 0) {
             htmlCategory = currentMonthData.categories.map(category => 
                 `<option value="${category.name}">${category.name}</option>`
             ).join("");
-        } else {
+        } 
+        else{
             htmlCategory = "<option value=''>Tiền chi tiêu</option>";
         }
     }
@@ -407,7 +408,7 @@ function renderCategory() {
 function renderTransactions() {
     let currentTransactions = transactions.filter(transaction => transaction.month === currentMonth);
     
-    if (currentTransactions.length === 0) {
+    if(currentTransactions.length === 0) {
         containerTransactionContent.innerHTML = "<br> <p>Không có giao dịch nào!</p>";
         return;
     }
@@ -662,7 +663,7 @@ function checkCategoryBudget() {
     let currentMonthData = monthlyCategories.find(item => item.month === currentMonth);
     let newArrCategoryBudget = [];
 
-    if (currentMonthData) {
+    if(currentMonthData) {
         currentMonthData.categories.forEach(category => {
             let categoryName = category.name;
             let categoryBudget = Number(category.budget);
@@ -681,10 +682,11 @@ function checkCategoryBudget() {
         });
     }
 
-    if (newArrCategoryBudget.length > 0) {
+    if(newArrCategoryBudget.length > 0) {
         arrCategoryBudget = newArrCategoryBudget;
     
-    } else {
+    } 
+    else{
        
         arrCategoryBudget =  [];
     }
@@ -698,13 +700,14 @@ function checkCategoryBudget() {
 function renderCheckCategoryBudget() {
     excessFoodExpenses.innerHTML = ""; 
 
-    if (arrCategoryBudget.length > 0) {
+    if(arrCategoryBudget.length > 0) {
         arrCategoryBudget.forEach(message => {
             let p = document.createElement("p");
             p.textContent = message;
             excessFoodExpenses.appendChild(p);
         });
-    } else {
+    } 
+    else{
         let p = document.createElement("p");
         p.textContent = "Không có danh mục nào chi tiêu vượt quá giới hạn trong tháng này.";
         excessFoodExpenses.appendChild(p);
@@ -737,7 +740,7 @@ checkCategoryBudget();
 renderCheckCategoryBudget();
 renderMoney();
 function renderMoney() {
-    if (!currentMonth) {
+    if(!currentMonth) {
         money.textContent = "0 VND";
         return;
     }
@@ -745,14 +748,14 @@ function renderMoney() {
     let monthData = monthlyCategories.find(m => m.month === currentMonth);
 
     
-    if (!monthData) {
+    if(!monthData) {
         money.textContent = "0 VND";
         money.classList.remove("moneyNegative");
         return;
     }
 
 
-    if (monthData && monthData.amount > 0 && monthData.amount !== undefined) {
+    if(monthData && monthData.amount > 0 && monthData.amount !== undefined) {
         money.textContent = (Number(monthData.amount).toLocaleString("vi-VN") + " VND");
         money.classList.remove("moneyNegative");
     } 
@@ -820,4 +823,3 @@ function renderTableStatistical(){
 }
 
 renderTableStatistical();
-
