@@ -60,7 +60,7 @@ let tbody = document.querySelector("#tbody");
 
 // Đăng xuất
 selectElement.addEventListener("change", function(event) {
-    if (event.target.value === "Đăng xuất") {
+    if(event.target.value === "Đăng xuất") {
         setTimeout(() => {
             if(!confirm("Bạn có chắc chắn muốn đăng xuất khỏi trang hay không?")){
                 event.target.value = "Tài khoản";
@@ -100,17 +100,19 @@ btnSave.addEventListener("click", function() {
     }
 
     let valueMoney = inputMoney.value.trim();
-    if (!valueMoney) {
+    if(!valueMoney){
         textMoneyEmpty.textContent = "Dữ liệu không được để trống";
         moneyEmpty.style.display = "block";
         inputMoney.style.borderColor = "red";
         return;
-    } else if (isNaN(valueMoney) || valueMoney < 0) {
+    } 
+    else if(isNaN(valueMoney) || valueMoney < 0) {
         textMoneyEmpty.textContent = "Dữ liệu nhập vào không hợp lệ";
         moneyEmpty.style.display = "block";
         inputMoney.style.borderColor = "red";
         return;
-    } else {
+    } 
+    else{
         moneyEmpty.style.display = "none";
         inputMoney.style.borderColor = "";
         inputMoney.value = "";
@@ -155,19 +157,21 @@ btnAddCategory.addEventListener("click", function() {
     let valueNameCategory = nameCategory.value.trim().charAt(0).toUpperCase() + nameCategory.value.trim().slice(1);
     let valueLimitMoney = limit.value.trim();
 
-    if (valueNameCategory === "") {
+    if(valueNameCategory === ""){
         Swal.fire({
             title: "Bạn chưa nhập tên danh mục",
             icon: "question"
         });
         return;
-    } else if (!valueLimitMoney) {
+    } 
+    else if(!valueLimitMoney){
         Swal.fire({
             title: "Bạn chưa nhập giới hạn chi tiêu",
             icon: "question"
         });
         return;
-    } else if (isNaN(valueLimitMoney) || valueLimitMoney < 0) {
+    } 
+    else if(isNaN(valueLimitMoney) || valueLimitMoney < 0){
         Swal.fire({
             icon: "error",
             title: "Cảnh báo",
@@ -189,14 +193,15 @@ btnAddCategory.addEventListener("click", function() {
 
     if (typeAddOrSave === "add") {
         let exisCategory = currentMonthData.categories.find(cat => cat.name === valueNameCategory);
-        if (exisCategory) {
+        if(exisCategory) {
             Swal.fire({
                 icon: "warning",
                 title: "Cảnh báo",
                 text: "Danh mục đã tồn tại",
             });
             return;
-        } else {
+        } 
+        else{
             count++;
             currentMonthData.categories.push({
                 id: count,
@@ -207,8 +212,8 @@ btnAddCategory.addEventListener("click", function() {
         renderCategory();
         localStorage.setItem(`monthlyCategories_${userId}`, JSON.stringify(monthlyCategories));
     } 
-    else {
-        if (editMonthIndex !== -1 && editCategoryIndex !== -1) {
+    else{
+        if(editMonthIndex !== -1 && editCategoryIndex !== -1) {
             monthlyCategories[editMonthIndex].categories[editCategoryIndex].name = valueNameCategory;
             monthlyCategories[editMonthIndex].categories[editCategoryIndex].budget = valueLimitMoney;
             typeAddOrSave = "add";
@@ -234,7 +239,7 @@ btnAddCategory.addEventListener("click", function() {
 function renderData() {
     let currentMonthData = monthlyCategories.find(month => month.month === currentMonth);
     
-    if (!currentMonthData) {
+    if(!currentMonthData) {
         expenditure.innerHTML = "<p>Không có dữ liệu cho tháng này.</p>";
         return;
     }
@@ -342,7 +347,7 @@ addMoney.addEventListener("click", function() {
     let monthlyCategories = JSON.parse(localStorage.getItem(`monthlyCategories_${userId}`)) || [];
     let currentMonthData = monthlyCategories.find(month => month.month === currentMonth);
 
-    if (!currentMonthData || currentMonthData.amount === undefined) {
+    if(!currentMonthData || currentMonthData.amount === undefined){
         Swal.fire({
             icon: "error",
             title: "Cảnh báo",
@@ -708,6 +713,8 @@ function renderCheckCategoryBudget() {
 arrCategoryBudget = JSON.parse(localStorage.getItem(`moneyOverLimit_${userId}`)) || [];
 renderCheckCategoryBudget();
 
+
+//Load lại trang lấy dữ liệu từ tháng đầu tiên
 if(monthlyCategories.length > 0){
     currentMonth = monthlyCategories[0].month;
     monthElement.value = currentMonth;
